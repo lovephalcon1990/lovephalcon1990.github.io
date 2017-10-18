@@ -1,0 +1,30 @@
+{
+    "name": "zengym/swoole",
+    "type": "composer-plugin",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4",
+        "ext-swoole": ">=1.8.9"
+    },
+    "authors": [
+        {
+            "name": "zengym",
+            "email": "zengyueming1990@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Zengym\\Lib\\": "Lib",
+            "Zengym\\Server\\":"Server",
+            "Zengym\\Model\\":"Model",
+            "Zengym\\Client\\":"Client",
+            "Zengym\\Tools\\":"Tools"
+        }
+    },
+
+    "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+    }
+    
+}
