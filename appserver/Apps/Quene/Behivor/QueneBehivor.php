@@ -1,11 +1,13 @@
 <?php
 namespace Zengym\Apps\Quene\Behivor;
 
+use Zengym\Apps\Quene\Model\Quene;
 use Zengym\Lib\Protocols\ReadPackage;
 use Zengym\Lib\Protocols\WritePackage;
 use Zengym\Lib\Protocols\IpcPackage;
 use Zengym\Lib\Core\Behavior;
 use Zengym\Lib\Core\MainHelper;
+use Zengym\Lib\Helper\DB;
 
 class QueneBehivor extends Behavior {
 
@@ -70,7 +72,7 @@ class QueneBehivor extends Behavior {
 		$ipcPackage = IpcPackage::String2IpcPack($data);
 		$ipcPackage->Fd = $client_info['address'];
 		$ipcPackage->From_id = $client_info['port'];
-		SwooleModelUdp::Process($ipcPackage);
+		Quene::Process($ipcPackage);
 		$this->CheckMemoryLimitAndExit();
 	}
 
@@ -91,7 +93,7 @@ class QueneBehivor extends Behavior {
 	 * @param type $serv
 	 * @param type $worker_id
 	 */
-	public function onWorkerStart(\swoole_server $serv, $worker_id) {
+	public function onWorkerStart($serv, $worker_id) {
 		//加载Texas初始化配置
 		define('IN_WEB', true);
 		define('IN_CRONTAB', true);
@@ -110,19 +112,19 @@ class QueneBehivor extends Behavior {
 		if ($worker_id == 0) {
 			$serv->tick(60001, function() use ($serv, $beginTime, $worker_id) {
 				$serverInfo['status'] = $serv->stats();
-				$serverInfo['main'] = TSWOOLE_MAIN ? 1 : 0;
+				$serverInfo['main'] = 0;
 				global $crontab_work_table;
 				foreach ($crontab_work_table as $trow) {
 					$serverInfo['workinfo'][$trow['workid']] = $trow;
 				}
 				$localIp = MainHelper::Get_Local_Ip();
 				$CacheKey = "SWOOLE_MONITOR_SERVERLIST_QUENE";
-				$data = ocache::mongoTemp()->get($CacheKey);
+				$data = DB::instance()->get($CacheKey);
 				if (!$data) {
 					$data = array();
 				}
 				$data[$localIp] = $serverInfo;
-				ocache::mongoTemp()->set($CacheKey, $data);
+				DB::instance()->set($CacheKey, $data);
 			});
 		}
 	}

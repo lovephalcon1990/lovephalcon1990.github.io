@@ -24,27 +24,22 @@ class CronConfig{
 		$processList['AsyncCall'] = array(
 			'method' => 'Zengym\Model\AsyncCall::exec();',
 			'cnt' => 1,
-			'interval' => 1,
+			'interval' => 2,
 			'exclude' =>  array(),
 			'cnt'=>2
 		);
 		
-		$processList['doUdp'] = array(
-			'method' => 'oo::udp()->doUdp();',
-			'cnt' => 1,
-			'interval' => 1,
-			'exclude' =>  array(),
-		);
+		
 		$processList['doproc0'] = array(
-			'method' => 'oo::proc()->doProc(0);',
+			'method' => 'Zengym\Model\Proc::doProc(0);',
 			'cnt' => 1,
-			'interval' => 1,
+			'interval' => 5,
 			'exclude' =>  array(),
 		);
 		$processList['doproc1'] = array(
-			'method' => 'oo::proc()->doProc(1);',
+			'method' => 'Zengym\Model\Proc::doProc(1);',
 			'cnt' => 1,
-			'interval' => 1,
+			'interval' => 2,
 			'exclude' =>  array(),
 			'switch' => 'newhall'
 		);

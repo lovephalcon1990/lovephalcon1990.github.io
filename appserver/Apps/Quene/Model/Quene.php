@@ -6,7 +6,8 @@
  * and open the template in the editor.
  */
 namespace Zengym\Apps\Quene\Model;
-
+use Zengym\Model\AsyncCall;
+use Zengym\Lib\Protocols\IpcPackage;
 
 class Quene {
 
@@ -24,7 +25,7 @@ class Quene {
 		$contentData = $ipcPackage->Data;
 		switch ($ipcPackage->Action) {
 			case 0x101://异步调用写入队列
-				Mod\Base\AsyncCall::push($contentData);
+				AsyncCall::push($contentData);
 				break;
 			case 0x102://log
 				//self::$I->Log($ipcPackage);

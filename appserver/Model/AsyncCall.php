@@ -10,13 +10,21 @@ namespace Zengym\Model;
 use Zengym\Lib\Helper\DB;
 use Zengym\Lib\Helper\Log;
 use Zengym\Apps\Cron\Model\Cron;
+use Zengym\Model\SClient;
 
 class AsyncCall{
 	private static $key = 'UDP|CB';//缓存key
+	private static $ip = "127.0.0.1";
+	private static $port =9851;//暂时写死
+	
+	const Action_Log = 0x102;
+	const Action_Callback = 0x101;
+	const Action_Udp = 0x103;
+	const Action_MTTSIGN = 0x104;
 
 	/**
 	 * 添加异步调用
-	 * @param string $obj 调用对象和方法，如'oo::minfo->set'
+	 * @param string $obj 调用对象和方法，
 	 * @param array $args 调用参数列表，数据组型，如参数为：1,array('a'=>2) 则传参 array(1,array('a'=>2))
 	 * @param int $delay 单位秒 延时多少秒后执行
 	 * @return boolean
@@ -25,11 +33,11 @@ class AsyncCall{
 		if(!$obj || !is_array($args)){
 			return false;
 		}
-		$aData = array(oo::$config['sid'], $obj, $args);
+		$aData = array(13, $obj, $args);
 		if($delay > 0){
 			$aData[] = (int)$delay;
 		}
-		oo::swoolequene()->SendToCallBack(json_encode($aData));//通过swoole udp，然后会调用AsyncCall::push方法
+		SClient::SendByUdp(self::$ip,self::$port,self::Action_Callback,json_encode($aData));//通过swoole udp，然后会调用AsyncCall::push方法
 		return true;
 	}
 

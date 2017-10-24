@@ -93,7 +93,7 @@ class CronBehivor extends Behavior {
 			}
 			eval($method);
 			Cron::SaveCrontabRunCnt($processName, false, $workid);
-			$this->destoryCache();
+			//$this->destoryCache();
 			Cron::SaveMonitorInfo($beginTime, $method,$beginUseMem);
 		}
 		Cron::SaveWorkerRequestCount($serv->worker_id);
