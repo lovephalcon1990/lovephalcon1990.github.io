@@ -270,10 +270,9 @@
         var  bottom=parseInt($('input[name=bottom]').val());
         var  code=barrager_code;
         if($('input:radio[name=bottomradio]:checked').val() == 0){
-        var  window_height=$(window).height()-150;
-        bottom=Math.floor(Math.random()*window_height+40);
-        code=code.replace("   bottom:{bottom}, //距离底部高度,单位px,默认随机 \n",'');
-
+            var  window_height=$(window).height()-150;
+            bottom=Math.floor(Math.random()*window_height+40);
+            code=code.replace("   bottom:{bottom}, //距离底部高度,单位px,默认随机 \n",'');
         }
 
         var  img=$('input:radio[name=img]:checked').val();

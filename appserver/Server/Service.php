@@ -1,8 +1,8 @@
 <?php
 namespace Zengym\Server;
 use swoole_server;
+use Zengym\Model\CronBehivor;
 use Exception;
-use Zengym\Model\ZYBehivor;
 
 //注：此文件修改后需要重启Swoole服务
 class Service {
@@ -22,7 +22,7 @@ class Service {
 	}
 
 	/**
-	 * @var ZYBehivor
+	 * @var CronBehivor
 	 */
 	private $_Behavior;
 
