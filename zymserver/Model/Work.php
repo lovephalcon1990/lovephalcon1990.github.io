@@ -35,8 +35,7 @@ class Work {
 	private $login_0x203, $login_0x201, $login_0x302, $sys_0x881, $sys_882;
 
 	/**
-	 * SwooleModelData
-	 * @var type 
+	 * @var Data
 	 */
 	private $dataAccess;
 

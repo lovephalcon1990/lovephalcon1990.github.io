@@ -30,13 +30,20 @@ class CronBehivor extends Behavior {
 			$this->readPackage->ReadPackageBuffer($packet_buff);
 			MainHelper::I()->Reset($server, $fd, $from_id);
 			$action = $this->readPackage->GetCmdType();
+			echo $action."\n";
 			switch ($action) {
 				case "0x881"://Test					
-					SwooleModelCrontab::TestAndClearCrontabRunCnt();
+					Cron::TestAndClearCrontabRunCnt();
 					$write = new WritePackage();
 					$write->Begin($action);
 					$write->Byte(1);
-					MainHelper::I()->SendPackage($write);
+					$write->End();
+					var_dump($write->GetBuffer());
+					MainHelper::I()->Send($write->GetBuffer());
+					$this->readPackage->ReadPackageBuffer($write->GetBuffer());
+					var_dump($this->readPackage);
+					
+					//MainHelper::I()->SendPackage($write);
 					break;
 				case "0x882"://重新reload
 					MainHelper::I()->Swoole->reload();
@@ -46,13 +53,13 @@ class CronBehivor extends Behavior {
 					MainHelper::I()->SendPackage($write);
 					break;
 				case "0x883"://获取监控信息及状态
-					SwooleModelcrontab::GetMonitorInfo($action);
+					Cron::GetMonitorInfo($action);
 					break;
 			}
 		} catch (Exception $ex) {
 			$info = $server->connection_info($fd);
 			$info['exption'] = $ex;
-			Swoole_Log('CrontabBehivorRecev', var_export($info, 1));
+			Swoole_Log('CronBehivorRecev', var_export($info, 1));
 		}
 	}
 
@@ -113,6 +120,7 @@ class CronBehivor extends Behavior {
 		ini_set('memory_limit', '512M');
 		define('IN_WEB', true);
 		define('IN_CRONTAB', true);
+		global $config;
 		set_time_limit(0);
 		Cron::SaveWorkerRunInfo($worker_id);
 		Cron::SaveMonitorInfoToLocal();

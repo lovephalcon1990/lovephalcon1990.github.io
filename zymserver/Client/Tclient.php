@@ -7,7 +7,7 @@
  */
 
 /**
- * Description of TSwooleClient
+ * Description of self
  */
 
 namespace Zengym\Client;
@@ -46,6 +46,7 @@ class Tclient {
 		return false;
 	}
 	
+	
 	/**
 	 * 发送并接收数据
 	 * @param type $swoole_client
@@ -60,7 +61,7 @@ class Tclient {
 			$readPackage->ReadPackageBuffer($responseData);
 			return $readPackage;
 		} catch (Exception $ex) {
-			Log::debug(var_export($ex, 1), "TSwooleClient.log");
+			Log::debug(var_export($ex, 1), "self.log");
 		}
 		return false;
 	}
@@ -90,10 +91,10 @@ class Tclient {
 	public static function ReloadSwoole($ip, $port, $action = 0x882) {
 		
 		$sockpack = new WritePackage();
-		$sockpack->WriteBegin($action);
-		$sockpack->WriteByte(2);
-		$sockpack->WriteEnd();
-		$readPackage = TSwooleClient::SendAndRecive($ip, $port, $sockpack->GetPacketBuffer());
+		$sockpack->Begin($action);
+		$sockpack->Byte(2);
+		$sockpack->End();
+		$readPackage = self::SendAndRecive($ip, $port, $sockpack->GetPacketBuffer());
 		if ($readPackage) {
 			return $readPackage->ReadByte();
 		}
@@ -110,10 +111,10 @@ class Tclient {
 	public static function TestSwoole($ip, $port, $action = 0x881) {
 		
 		$sockpack = new WritePackage();
-		$sockpack->WriteBegin($action);
-		$sockpack->WriteShort(1);
-		$sockpack->WriteEnd();
-		$readPackage = TSwooleClient::SendAndRecive($ip, $port, $sockpack->GetPacketBuffer());
+		$sockpack->Begin($action);
+		$sockpack->Short(1);
+		$sockpack->End();
+		$readPackage = self::SendAndRecive($ip, $port, $sockpack->GetPacketBuffer());
 		if ($readPackage) {
 			return $readPackage->ReadByte();
 		}
@@ -129,10 +130,10 @@ class Tclient {
 	public static function GetCurrentMonitorInfo($ip, $port, $action = 0x883) {
 		
 		$sockpack = new WritePackage();
-		$sockpack->WriteBegin($action);
-		$sockpack->WriteShort(1);
-		$sockpack->WriteEnd();
-		$read = TSwooleClient::SendAndRecive($ip, $port, $sockpack->GetPacketBuffer());
+		$sockpack->Begin($action);
+		$sockpack->Short(1);
+		$sockpack->End();
+		$read = self::SendAndRecive($ip, $port, $sockpack->GetPacketBuffer());
 		if ($read) {
 			return $read->ReadString();
 		} else {

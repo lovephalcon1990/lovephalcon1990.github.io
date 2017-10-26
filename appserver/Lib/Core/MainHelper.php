@@ -14,7 +14,7 @@ namespace Zengym\Lib\Core;
 use Zengym\Lib\Protocols\WritePackage;
 
 class MainHelper {
-
+	
 	public static function I() {
 		static $I = false;
 		if (!$I) {
@@ -22,21 +22,21 @@ class MainHelper {
 		}
 		return $I;
 	}
-
+	
 	public $Swoole;
 	public $fd;
 	public $from_id;
-
+	
 	public function Reset($swoole, $fd, $from_id) {
 		$this->Swoole = $swoole;
 		$this->fd = $fd;
 		$this->from_id = $from_id;
 	}
-
+	
 	private function __construct() {
 		
 	}
-
+	
 	/**
 	 * socket 发信息回用户
 	 * @param WritePackage $writePack
@@ -46,7 +46,7 @@ class MainHelper {
 		$writePack->End();
 		$this->Send($writePack->GetBuffer());
 	}
-
+	
 	/**
 	 * 调用Swoole的send方法
 	 * @param type $data
@@ -54,21 +54,21 @@ class MainHelper {
 	public function Send($data) {
 		$this->Swoole->send($this->fd, $data, $this->from_id);
 	}
-
+	
 	/**
 	 * 关闭连接
 	 */
 	public function Close() {
 		$this->Swoole->close($this->fd);
 	}
-
+	
 	/**
 	 * 重启worker进程
 	 */
 	public function Reload() {
 		$this->Swoole->reload();
 	}
-
+	
 	/**
 	 * 将任务转交至Task进程异步处理
 	 * @param type $data
@@ -78,7 +78,7 @@ class MainHelper {
 	public function Task($data, $dst_worker_id = -1) {
 		return $this->Swoole->task($data, $dst_worker_id);
 	}
-
+	
 	/**
 	 * 与Worker进程通信
 	 * @param type $message
@@ -91,7 +91,7 @@ class MainHelper {
 	 * 检测否为本地虚拟机，方便去掉调试
 	 */
 	public static function IsLocalVm(){
-		$local_ip = self::Get_Local_Ip();	
+		$local_ip = self::Get_Local_Ip();
 		$ipaddress = long2ip($local_ip);
 		if(strpos($ipaddress, '192.168.56.')!==FALSE){
 			return true;
@@ -130,5 +130,5 @@ class MainHelper {
 		}
 		return ip2long($server_ip);
 	}
-
+	
 }

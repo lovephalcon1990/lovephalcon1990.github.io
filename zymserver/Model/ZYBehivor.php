@@ -13,7 +13,7 @@ class ZYBehivor extends Behavior {
 
 	/**
 	 * work进程业务处理-只有work事件才有
-	 * @var SwooleModelWork
+	 * @var Work
 	 */
 	private $workModel;
 
@@ -34,7 +34,6 @@ class ZYBehivor extends Behavior {
 	public function onReceive($server, $fd, $from_id, $packet_buff) {
 		try {
 			$ret = $this->workModel->readPackage->ReadPackageBuffer($packet_buff);
-			
 			if ($ret != 1) {
 				return;
 			}

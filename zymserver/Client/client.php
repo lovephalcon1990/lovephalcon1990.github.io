@@ -10,13 +10,22 @@ require SWOOLE_ROOT . '../vendor/autoload.php';
 use Zengym\Client\Tclient;
 
 $wr = new Zengym\Lib\Protocols\WritePackage(true);
-$wr->Begin(0x109);
+$msg = "123444aaa哈哈";
+$wr->Begin(0x881);
+$wr->Int(20202);
+$wr->String('cade073b2c1b6612db735a41c11853f4');
+$wr->String(rawurlencode($msg));
 $wr->End();
-$swoole_client = Tclient::CreateClientAndConnect("127.0.0.1", 9752);
 $tcpData = $wr->GetBuffer();
+$swoole_client = Tclient::CreateClientAndConnect("127.0.0.1", 9752);
 var_dump($tcpData);
 echo "\n";
 $swoole_client->send($tcpData);
-
 $responseData = $swoole_client->recv();
-var_dump($responseData);die();
+$rd = new Zengym\Lib\Protocols\ReadPackage();
+$rd->ReadPackageBuffer($responseData);
+var_dump($rd->GetCmdType());
+var_dump($rd->GetBuffer());
+//var_dump($rd->Int());
+//var_dump(rawurldecode($rd->String()));
+exit;

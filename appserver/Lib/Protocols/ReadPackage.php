@@ -35,8 +35,6 @@ class ReadPackage extends SocketPackage {
 		$header = $this->m_packetBuffer->read(0,7);
 		
 		$headerInfo = unpack("nPackLen/c2Iden/cVer/nCmdType", $header);
-		
-		
 		if ($headerInfo['PackLen'] != ($this->package_realsize - 2)) {
 			//非法包,包内容和包长度不符合;
 			return -3;
@@ -50,6 +48,7 @@ class ReadPackage extends SocketPackage {
 			//非法包头;
 			return -5;
 		}
+		
 		if ($headerInfo['CmdType'] <= 0 || $headerInfo['CmdType'] >= 32000) {
 			//throw new Exception("非法包头,-3");
 			return -6;
@@ -118,7 +117,7 @@ class ReadPackage extends SocketPackage {
 		if($this->package_realsize<=$this->m_Offset){
 			return false;
 		}
-		$len = $this->ReadInt();
+		$len = $this->Int();
 		if($len===false){
 			return false;
 		}

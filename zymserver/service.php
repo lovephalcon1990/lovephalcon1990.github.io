@@ -7,7 +7,7 @@ define("SWOOLE_ENV",$argv[1]);
 
 define("SWOOLE_PORT",$argv[2]);
 
-define("SWOOLE_UDP",$argv[3]);
+define("SWOOLE_UDPPORT",$argv[3]);
 
 require SWOOLE_ROOT . '/vendor/autoload.php';
 use Zengym\Server\Service;
@@ -47,7 +47,7 @@ $socket_mid_table->column('mid', swoole_table::TYPE_INT, 4);//文件描述符
 $socket_mid_table->create();
 
 
-$Service->Swoole->addListener($SwooleConfig['Host'], SWOOLE_UDP, SWOOLE_SOCK_UDP);
+$Service->Swoole->addListener($SwooleConfig['Host'], SWOOLE_UDPPORT, SWOOLE_SOCK_UDP);
 $Service->Start();
 
 

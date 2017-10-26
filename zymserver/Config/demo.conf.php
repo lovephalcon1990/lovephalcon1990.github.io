@@ -18,6 +18,6 @@ return array(
 		'package_length_offset'=>0,
 		'package_body_offset'=>2,
 		'package_max_length'=>65537,
-		'message_queue_key'=>65535+SW_PORT*10
+		'message_queue_key'=>65535+SWOOLE_PORT*10
 	)
 );
