@@ -2,7 +2,7 @@
 system('umask 002');
 system('source /etc/profile');
 //此进程会每隔1分钟启动一次,用于启动Swoole及监控，确保swoole出故障后会自动重启
-define("SWOOLE_ROOT",dirname(__FILE__)."/../");
+define("SWOOLE_ROOT",dirname(__FILE__)."/");
 define("PATH_DAT",SWOOLE_ROOT."data/");
 define("SWOOLE_ENV",$argv[1]);
 define('IN_WEB', true);
@@ -11,7 +11,6 @@ define('SWOOLE_WEBMAIN', 1); //1：为主web服务 0：为从web
 defined('IS_PHP7') or define('IS_PHP7', strpos(PHP_VERSION, '7.') === 0);
 
 require SWOOLE_ROOT."vendor/autoload.php";
-use Zengym\Apps\Cron\CronMonitor;
 if(IS_PHP7){
 	define('PHP_BIN', 'php -f ');
 }else{
@@ -27,11 +26,9 @@ if(!is_dir(SWOOLE_VERTMPROOT)){
 //system($monitorPath);
 
 
-
-	//启动CrontabService.php 定时任务,内网所有定时只有主Web执行 
-	
-$CronMonitor = new CronMonitor();
-$CronMonitor->Start();
+//启动CrontabService.php 定时任务,内网所有定时只有主Web执行
+//$CronMonitor = new Zengym\Apps\Cron\CronMonitor();
+//$CronMonitor->Start();
 
 
 //iplocation
@@ -51,11 +48,10 @@ $CronMonitor->Start();
 //	$LogMonitor = new SwooleLogMonitor();
 //	$LogMonitor->Start();
 //}elseif(!PRODUCTION_SERVER && !TSWOOLE_WEBMAIN){
-//	//内网日志全部放在192.168.202.93机器上
-//	//启动Udp/日志服务
-//	include_once dirname(__FILE__) . '/LogMonitor.php';
-//	$LogMonitor = new SwooleLogMonitor();
-//	$LogMonitor->Start();
+	//内网日志全部放在192.168.202.93机器上
+	//启动Udp/日志服务
+	$LogMonitor = new Zengym\Apps\Log\LogMonitor();
+	$LogMonitor->Start();
 //}
 //
 //if(PRODUCTION_SERVER){

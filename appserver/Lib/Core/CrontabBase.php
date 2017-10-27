@@ -1,6 +1,5 @@
 <?php
 namespace Zengym\Lib\Core;
-use Zengym\Lib\Core\MainHelper;
 use Zengym\Lib\Helper\Log;
 
 abstract class CrontabBase{
@@ -44,6 +43,9 @@ abstract class CrontabBase{
 		$psGrep = $this->SwooleName . '.php' . ' '. $env  . ' ' . $port . ' ' . $udpport;
 		
 		$this->run_processName = PHP_BIN . $runFile;
+		$this->run_psGrep = $psGrep;
+		
+		
 		//强制重启Swoole进程
 		$killVer = $this->getKillVer();
 		
@@ -60,7 +62,6 @@ abstract class CrontabBase{
 			$working = 0;
 			while($check){
 				$working = $this->TestSwooleIsWorking();
-				echo $working."\n";
 				if($working){
 					break;
 				}
@@ -82,7 +83,6 @@ abstract class CrontabBase{
 				$send = false;
 				while($check){
 					$send = $this->ReloadSwooleByTcp();
-					echo $send."\n";
 					if($send){
 						break;
 					}
