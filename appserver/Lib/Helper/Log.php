@@ -1,6 +1,7 @@
 <?php
 
 namespace Zengym\Lib\Helper;
+use Zengym\Lib\Protocols\UdpWritePackage;
 
 class Log{
 	
@@ -45,23 +46,25 @@ class Log{
 			return false;
 		}
 		$d = (array)debug_backtrace();
-		if($d[1] && $d[1]['function'] && ($d[1]['class'] === 'ModelLogs' && $d[1]['function'] === 'debug' || $d[1]['function'] === 'debugDemo')){//兼容老方法logs.php:debug
-			$d[0] = $d[1];
-			$d[1] = $d[2];
-		}
-		if($d[1] && $d[1]['function']){//方法中调用
-			if($dir = $d[1]['class']){//类中的方法
-				$dir = str_replace('\\', '_', $dir);
-			}else{//普通方法
-				$dir = 'debug';
+		if(isset($d[1]) && $d[1]){
+			if($d[1] && $d[1]['function'] && ($d[1]['class'] === 'ModelLogs' && $d[1]['function'] === 'debug' || $d[1]['function'] === 'debugDemo')){//兼容老方法logs.php:debug
+				$d[0] = $d[1];
+				$d[1] = $d[2];
 			}
-			$fn = $d[1]['function'];
-			$line = $d[0]['line'];
-			if(!$fname){
-				$fname = $dir . '/' . ($fname ? $fname : $fn); //自动按类进行分子目录
-				$prefix = '[' . $fn . ':' . $line . "]\t";
-			}else if($d[1]['class']){
-				$prefix = '[' . $d[1]['class'] . $d[1]['type'] . $fn . ':' . $line . "]\t";
+			if($d[1] && $d[1]['function']){//方法中调用
+				if($dir = $d[1]['class']){//类中的方法
+					$dir = str_replace('\\', '_', $dir);
+				}else{//普通方法
+					$dir = 'debug';
+				}
+				$fn = $d[1]['function'];
+				$line = $d[0]['line'];
+				if(!$fname){
+					$fname = $dir . '/' . ($fname ? $fname : $fn); //自动按类进行分子目录
+					$prefix = '[' . $fn . ':' . $line . "]\t";
+				}else if($d[1]['class']){
+					$prefix = '[' . $d[1]['class'] . $d[1]['type'] . $fn . ':' . $line . "]\t";
+				}
 			}
 		}else{//文件直接调用
 			$file = str_replace(SWOOLE_ROOT, '', $d[0]['file']);
@@ -200,5 +203,74 @@ class Log{
 		}
 		
 		return $output;
+	}
+	
+	
+	/**
+	 * 新版udp-log
+	 * @param string $params
+	 * @param int $fname
+	 * @param int $fsize
+	 * @param array $ext
+	 * @return boolean
+	 */
+	private static function swooleDebug($params, $fname, $fsize = 1, $ext = []){
+		if(!$params || !is_string($params)){
+			return;
+		}
+		
+		//长度超过8000进行截取(因为udp包 包含命令号，文件名字等等，除去大概300长度)
+		if(strlen($params) > 7700){
+			$params = substr($params, 0, 7700) . '该Log日志已超过8k，已被截取';
+		}
+		
+		self::_sendDataToUdpServer($params, $fname, $fsize, $ext);
+	}
+	
+	/**
+	 * 将日志发送到udp server服务
+	 * @param string $params
+	 * @param string $fname
+	 * @param number $fsize
+	 * @param array $ext
+	 * @return boolean
+	 */
+	private static function _sendDataToUdpServer($params, $fname, $fsize = 1, $ext = []){
+		if(!$params){
+			return false;
+		}
+		if(!$content = self::_getUdpContent($fname, $fsize, $ext, $params)){
+			$content = self::_getUdpContent($fname, $fsize, $ext, '该Log日志已超过8k，记录失败！');
+		}
+		$updLogServer = self::logServerSwitch();
+		$sSocket = socket_create(AF_INET, SOCK_DGRAM, SOL_UDP);
+		socket_sendto($sSocket, $content, strlen($content), 0, $updLogServer['ip'], $updLogServer['port']);
+	}
+	
+	/**
+	 * 获取udp内容，解包逻辑：crontab/Swoole/Apps/Log/LogDebugHandle.php
+	 * @param string $fname
+	 * @param int $fsize
+	 * @param array $ext
+	 * @param string $params
+	 * @return bite
+	 */
+	private static function _getUdpContent($fname, $fsize, $ext, $params){
+		$udp = new UdpWritePackage();
+		$udp->WriteBegin(0x0100);
+		$udp->WriteString($fname);
+		$udp->WriteInt($fsize);
+		$udp->WriteByte($ext['bak'] ? 1 : 0);
+		$udp->WriteByte(1);
+		$udp->WriteString($params);
+		return $udp->WriteEnd();
+	}
+	
+	/**
+	 * @desc upd log server切换
+	 * @return string[]|number[]|mixed[]
+	 */
+	private static function logServerSwitch(){
+		return array('ip' => "127.0.0.1", 'port' => 9852);
 	}
 }
