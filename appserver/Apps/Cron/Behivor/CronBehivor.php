@@ -30,22 +30,21 @@ class CronBehivor extends Behavior {
 			$this->readPackage->ReadPackageBuffer($packet_buff);
 			MainHelper::I()->Reset($server, $fd, $from_id);
 			$action = $this->readPackage->GetCmdType();
-			echo $action."\n";
 			switch ($action) {
 				case "0x881"://Test					
 					Cron::TestAndClearCrontabRunCnt();
 					$write = new WritePackage();
+					//if(IS_PHP7){
+						$action = $this->readPackage->CmdType;
+					//}
 					$write->Begin($action);
 					$write->Byte(1);
-					$write->End();
-					var_dump($write->GetBuffer());
-					MainHelper::I()->Send($write->GetBuffer());
-					$this->readPackage->ReadPackageBuffer($write->GetBuffer());
-					var_dump($this->readPackage);
-					
-					//MainHelper::I()->SendPackage($write);
+					MainHelper::I()->SendPackage($write);
 					break;
 				case "0x882"://重新reload
+					//if(IS_PHP7){
+						$action = $this->readPackage->CmdType;
+					//}
 					MainHelper::I()->Swoole->reload();
 					$write = new WritePackage();
 					$write->Begin($action);
@@ -53,6 +52,9 @@ class CronBehivor extends Behavior {
 					MainHelper::I()->SendPackage($write);
 					break;
 				case "0x883"://获取监控信息及状态
+					//if(IS_PHP7){
+						$action = $this->readPackage->CmdType;
+					//}
 					Cron::GetMonitorInfo($action);
 					break;
 			}
@@ -120,7 +122,6 @@ class CronBehivor extends Behavior {
 		ini_set('memory_limit', '512M');
 		define('IN_WEB', true);
 		define('IN_CRONTAB', true);
-		global $config;
 		set_time_limit(0);
 		Cron::SaveWorkerRunInfo($worker_id);
 		Cron::SaveMonitorInfoToLocal();

@@ -27,7 +27,7 @@ use Zengym\Model\SClient;
 echo "<pre>";
 $wr = new Zengym\Lib\Protocols\WritePackage();
 $msg = "123444aaa哈哈";
-$wr->Begin(0x882);
+$wr->Begin(0x881);
 $wr->Int(20202);
 $wr->String('cade073b2c1b6612db735a41c11853f4');
 $wr->String(rawurlencode($msg));

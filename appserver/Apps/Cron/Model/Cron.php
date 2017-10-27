@@ -142,7 +142,7 @@ class Cron {
 		if (!$data) {
 			$data = array();
 		}
-		//$data[$local_ip] = $serverInfo;
+		$data[$local_ip] = $serverInfo;
 		DB::instance()->set($CacheKey, $data);
 	}
 

@@ -8,6 +8,6 @@ define('SWOOLE',true);
 define('SWOOLE_ENV', intval($argv[1])); //1：线上，0：内网
 define('SWOOLE_PORT', intval($argv[2])); //1:监听端口
 define('SWOOLE_UDPPORT', intval($argv[3])); //1:监听Udp端口
-
+defined('IS_PHP7') or define('IS_PHP7', strpos(PHP_VERSION, '7.') === 0);
 require SWOOLE_ROOT."vendor/autoload.php";
 

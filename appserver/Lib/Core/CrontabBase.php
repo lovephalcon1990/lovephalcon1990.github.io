@@ -46,11 +46,11 @@ abstract class CrontabBase{
 		$this->run_processName = PHP_BIN . $runFile;
 		//强制重启Swoole进程
 		$killVer = $this->getKillVer();
-		echo $killVer."\n";
+		
 		$killFile = SWOOLE_VERTMPROOT . $this->SwooleName . '.kill.ver';
 		$reload = false;
+		
 		if((!is_file($killFile)) || file_get_contents($killFile) != $killVer){
-			echo $killFile."===".file_get_contents($killFile)."\n";
 			$this->ReloadSwooleService($runFile, $psGrep, 1, $this->SwooleName);
 			file_put_contents($killFile, $killVer, null);
 			$reload = true;
@@ -60,7 +60,7 @@ abstract class CrontabBase{
 			$working = 0;
 			while($check){
 				$working = $this->TestSwooleIsWorking();
-				//print_r($working);echo "\n";
+				echo $working."\n";
 				if($working){
 					break;
 				}
@@ -73,15 +73,16 @@ abstract class CrontabBase{
 			}
 		}
 		//重启work进程
+		
 		if(!$reload){
 			$swooleVer = $this->getHotReloadVer();
-			echo $swooleVer."\n";
 			$CrontabVerFile = SWOOLE_VERTMPROOT . $this->SwooleName . '.ver';
 			if((!is_file($CrontabVerFile)) || file_get_contents($CrontabVerFile) != $swooleVer){
 				$check = 3;
 				$send = false;
 				while($check){
 					$send = $this->ReloadSwooleByTcp();
+					echo $send."\n";
 					if($send){
 						break;
 					}
@@ -111,7 +112,6 @@ abstract class CrontabBase{
 	 */
 	private function writeHotReloadVer($swooleVer){
 		$SwooleVerFile = SWOOLE_VERTMPROOT . $this->SwooleName . '.ver';
-		echo $SwooleVerFile."====".$swooleVer."\n";
 		file_put_contents($SwooleVerFile, $swooleVer, null);
 	}
 	
