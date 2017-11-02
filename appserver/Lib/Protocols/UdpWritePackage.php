@@ -37,10 +37,6 @@ class UdpWritePackage {
 		$this->len += 2;
 	}
 	
-	/**
-	 * 和gameserver兼容
-	 * @param type $int
-	 */
 	public function WriteNewInt($int) {
 		$this->buff .= pack('I', $int);
 		$this->len += 4;

@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: YuemingZeng
- * Date: 2017/10/27
- * Time: 16:22
- */
+
 namespace Zengym\Lib\Protocols;
 
 class UdpReadPackage {

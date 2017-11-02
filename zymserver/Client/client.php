@@ -11,21 +11,30 @@ use Zengym\Client\Tclient;
 
 $wr = new Zengym\Lib\Protocols\WritePackage(true);
 $msg = "123444aaa哈哈";
-$wr->Begin(0x881);
-$wr->Int(20202);
-$wr->String('cade073b2c1b6612db735a41c11853f4');
-$wr->String(rawurlencode($msg));
+$wr->Begin(0x888);
+//$wr->Int(20202);
+$wr->String('f35537b335a767c5b60d76863daff7af');
+//$wr->String(rawurlencode($msg));
 $wr->End();
 $tcpData = $wr->GetBuffer();
 $swoole_client = Tclient::CreateClientAndConnect("127.0.0.1", 9752);
-var_dump($tcpData);
-echo "\n";
+
 $swoole_client->send($tcpData);
 $responseData = $swoole_client->recv();
-$rd = new Zengym\Lib\Protocols\ReadPackage();
+$rd = new Zengym\Lib\Protocols\ReadPackage(true);
 $rd->ReadPackageBuffer($responseData);
 var_dump($rd->GetCmdType());
-var_dump($rd->GetBuffer());
+
+echo "\n";
+var_dump($rd->String());
+echo "\n";
+
+var_dump($rd->Short());
+echo "\n";
+var_dump($rd->Byte());
+echo "\n";
+
+//var_dump($rd->GetBuffer());
 //var_dump($rd->Int());
 //var_dump(rawurldecode($rd->String()));
 exit;

@@ -120,7 +120,7 @@ class ReadPackage extends SocketPackage {
 		if($len===false){
 			return false;
 		}
-		$realLen=$this->m_packetBuffer->length-$this->m_Offset;
+		$realLen=$this->m_packetBuffer->length - $this->m_Offset;
 		if($realLen<$len-1){
 			return false;
 		}

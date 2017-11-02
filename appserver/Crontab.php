@@ -27,8 +27,8 @@ if(!is_dir(SWOOLE_VERTMPROOT)){
 
 
 //启动CrontabService.php 定时任务,内网所有定时只有主Web执行
-//$CronMonitor = new Zengym\Apps\Cron\CronMonitor();
-//$CronMonitor->Start();
+$CronMonitor = new Zengym\Apps\Cron\CronMonitor();
+$CronMonitor->Start();
 
 
 //iplocation
@@ -50,8 +50,8 @@ if(!is_dir(SWOOLE_VERTMPROOT)){
 //}elseif(!PRODUCTION_SERVER && !TSWOOLE_WEBMAIN){
 	//内网日志全部放在192.168.202.93机器上
 	//启动Udp/日志服务
-	$LogMonitor = new Zengym\Apps\Log\LogMonitor();
-	$LogMonitor->Start();
+	//$LogMonitor = new Zengym\Apps\Log\LogMonitor();
+	//$LogMonitor->Start();
 //}
 //
 //if(PRODUCTION_SERVER){

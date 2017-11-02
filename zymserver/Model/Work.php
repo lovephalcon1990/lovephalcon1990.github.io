@@ -121,6 +121,8 @@ class Work {
 		$write = new WritePackage(true);
 		$write->Begin(0x888);
 		$write->String(json_encode($data));
+		$write->Byte(1);
+		$write->Short(2);
 		MainHelper::I()->SendPackage($write);
 	}
 

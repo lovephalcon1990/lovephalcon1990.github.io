@@ -49,7 +49,6 @@ class LogBehivor extends Behavior{
 			}
 		}
 		$ret_data = false;
-		echo $this->udpPackage->cmdType."\n";
 		switch($this->udpPackage->cmdType){
 			case 0x0100://Mod\Base\Log::debug日志处理
 				$ret_data = DebugHandle::Package($this->udpPackage, $client_info, $this->taskCnt);
