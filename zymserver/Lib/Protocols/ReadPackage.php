@@ -15,7 +15,7 @@ class ReadPackage extends SocketPackage {
 	private $realpacket_buff='';
 	
 	public function ReadPackageBuffer($packet_buff) {
-		$this->realpacket_buff=$packet_buff;	
+		$this->realpacket_buff=$packet_buff;
 		if (!$this->m_packetBuffer) {
 			$this->m_packetBuffer = new swoole_buffer(65537);
 		} else {
@@ -32,7 +32,7 @@ class ReadPackage extends SocketPackage {
 			//非法包,包过大;
 			return -2;
 		}
-		$header = $this->m_packetBuffer->read(0,7);
+		 $header = $this->m_packetBuffer->read(0,7);
 		
 		$headerInfo = unpack("nPackLen/c2Iden/cVer/nCmdType", $header);
 		if ($headerInfo['PackLen'] != ($this->package_realsize - 2)) {
@@ -103,7 +103,7 @@ class ReadPackage extends SocketPackage {
 		if($this->package_realsize<=$this->m_Offset){
 			return false;
 		}
-		$temp = $this->m_packetBuffer->read($this->m_Offset, 4);		
+		$temp = $this->m_packetBuffer->read($this->m_Offset, 4);
 		$this->m_Offset+=4;
 		if($temp===false){
 			return false;
