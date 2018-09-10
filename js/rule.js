@@ -5,7 +5,7 @@
 function toThousands(num) {
 	n = Number(num).toFixed(2);
 	s = n.toString().split('.');
-	return s[0].replace(/(\d)(?=(\d{3})+$)/,'$1,')+'.'+s[1];
+	return s[0].replace(/(\d)(?=(\d{3})+$)/g,'$1,')+'.'+s[1];
 };
 
 

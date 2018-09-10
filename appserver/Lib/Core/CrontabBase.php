@@ -21,7 +21,7 @@ abstract class CrontabBase{
 	 * @var type
 	 */
 	public $run_processName;
-	
+
 	/**
 	 * 强制重启需设置的版本号
 	 */
@@ -36,22 +36,22 @@ abstract class CrontabBase{
 		if($port < 5000 || $udpport < 5000){
 			die('not set port!');
 		}
-		
+
 		$env = SWOOLE_ENV;
-		
+
 		$runFile = SWOOLE_ROOT .$this->SwooleDir. $this->SwooleName . '.php' .  ' ' . $env  . ' ' . $port . ' ' . $udpport;
 		$psGrep = $this->SwooleName . '.php' . ' '. $env  . ' ' . $port . ' ' . $udpport;
-		
+
 		$this->run_processName = PHP_BIN . $runFile;
 		$this->run_psGrep = $psGrep;
-		
-		
+
+
 		//强制重启Swoole进程
 		$killVer = $this->getKillVer();
-		
+
 		$killFile = SWOOLE_VERTMPROOT . $this->SwooleName . '.kill.ver';
 		$reload = false;
-		
+
 		if((!is_file($killFile)) || file_get_contents($killFile) != $killVer){
 			$this->ReloadSwooleService($runFile, $psGrep, 1, $this->SwooleName);
 			file_put_contents($killFile, $killVer, null);
@@ -74,7 +74,7 @@ abstract class CrontabBase{
 			}
 		}
 		//重启work进程
-		
+
 		if(!$reload){
 			$swooleVer = $this->getHotReloadVer();
 			$CrontabVerFile = SWOOLE_VERTMPROOT . $this->SwooleName . '.ver';
@@ -96,7 +96,7 @@ abstract class CrontabBase{
 			}
 		}
 	}
-	
+
 	/**
 	 * 获取重启的版本号
 	 * @return type
@@ -105,7 +105,7 @@ abstract class CrontabBase{
 		$swooleverData = include_once SWOOLE_VERROOT . $this->SwooleName . '.ver.php';
 		return $swooleverData['ver'];
 	}
-	
+
 	/**
 	 * 记录版本号
 	 * @param type $swooleVer
@@ -114,7 +114,7 @@ abstract class CrontabBase{
 		$SwooleVerFile = SWOOLE_VERTMPROOT . $this->SwooleName . '.ver';
 		file_put_contents($SwooleVerFile, $swooleVer, null);
 	}
-	
+
 	/**
 	 * 重启Swoole进程，先kill再重启
 	 * @param type $runFile
@@ -145,9 +145,8 @@ abstract class CrontabBase{
 		if($runType != 1){
 			$ip = long2ip(MainHelper::Get_Local_Ip());
 			$info = "[server error]-Swoole服务进程【" . $ip . "-" . $swooleName . "】异常:" . $types[$runType];
-			
 			Log::debug($info);
 		}
 	}
-	
+
 }

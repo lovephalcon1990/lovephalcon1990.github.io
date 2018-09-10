@@ -182,7 +182,7 @@
 		'info':'弹幕文字信息',
 		'href':'http://www.yaseng.org',
 		'close':true,
-		'speed':6,
+		'speed':20,
 		'bottom':70,
 		'color':'#fff' ,
 		'old_ie_color':'#000000'
@@ -230,7 +230,7 @@
 
     });
 
-	var wsServer = 'ws://127.0.0.1:9501';
+	var wsServer = 'ws://172.16.10.71:9501';
 	var websocket= new WebSocket(wsServer);
 
 	console.log(websocket.readyState);
@@ -300,7 +300,7 @@
         }
 
 
-        code=code.format(item);
+        code=code.formatformat(item);
         console.log(code);
 
 //        eval(code);
