@@ -77,7 +77,7 @@ vim /etc/nginx/nginx.conf  //修改 user  nginx ;为 user  apache;
 
 3 cd /mnt; ./VBoxLinuxAdditions.run
 
-
+4 mount -t vboxsf wwwroot /data/wwwroot
 
 
 
