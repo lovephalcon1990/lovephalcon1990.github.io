@@ -75,7 +75,7 @@ vim /etc/nginx/nginx.conf  //修改 user  nginx ;为 user  apache;
 
 2 将CD进行挂载。mount /dev/cdrom /data/wwwroot (mnt/目录下创建的文件夹)
 
-3 cd /mnt; ./VBoxLinuxAdditions.run
+3 cd /mnt; ./VBoxLinuxAdditions.run or ./VBoxLinuxAdditions.run --nox11
 
 4 mount -t vboxsf wwwroot /data/wwwroot
 
